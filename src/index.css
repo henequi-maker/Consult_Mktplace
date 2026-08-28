@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f3f5f0;
+  --color-fog: #e8ece4;
+  --color-ink: #0c1622;
+  --color-deep: #101f2e;
+  --color-slate2: #51616f;
+  --color-pine: #0f7a4d;
+  --color-pinedeep: #0a5a38;
+  --color-mint: #4cc58a;
+  --color-mintsoft: #dcefe4;
+  --color-signal: #c2402a;
+  --color-signalsoft: #f6e2dc;
+  --color-amber: #dd9f2b;
+
+  --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-pine);
+  color: #f3f5f0;
+}
+
+/* ---- textura de ruído (overlay global) ---- */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- papel milimetrado sutil ---- */
+.bg-gridlines {
+  background-image:
+    linear-gradient(rgba(12, 22, 34, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12, 22, 34, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.bg-gridlines-dark {
+  background-image:
+    linear-gradient(rgba(243, 245, 240, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 245, 240, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ---- letreiro / marquee ---- */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee-x 46s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---- cursor do console ---- */
+@keyframes blink-caret {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.caret-blink {
+  animation: blink-caret 1.05s steps(1) infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.72);
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* ---- slider do simulador ---- */
+input[type="range"].cq-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-pine) 0%,
+    var(--color-pine) var(--fill, 50%),
+    rgba(243, 245, 240, 0.18) var(--fill, 50%),
+    rgba(243, 245, 240, 0.18) 100%
+  );
+  outline: none;
+}
+input[type="range"].cq-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: var(--color-paper);
+  border: 3px solid var(--color-pine);
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+input[type="range"].cq-range::-webkit-slider-thumb:hover {
+  transform: scale(1.15) rotate(45deg);
+}
+input[type="range"].cq-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: var(--color-paper);
+  border: 3px solid var(--color-pine);
+  cursor: grab;
+}
+
+/* ---- acordeão ---- */
+.acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.acc-panel.open {
+  grid-template-rows: 1fr;
+}
+.acc-panel > div {
+  overflow: hidden;
+}
+
+/* ---- sublinhado que desliza nos links ---- */
+.link-slide {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.3s ease;
+}
+.link-slide:hover {
+  background-size: 100% 1.5px;
+}
+
+/* ---- movimento reduzido ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .caret-blink,
+  .pulse-dot {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
